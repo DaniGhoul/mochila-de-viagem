@@ -1,0 +1,649 @@
+https://www.alura.com.br/artigos/entenda-diferenca-entre-var-let-e-const-no-javascript
+
+Aula 1 - Manipulando dados
+Eu preciso agora capturar o meu formulário. Para capturar o meu formulário, eu vou usar aqui o id 
+novoItem. document.getElementById("novoItem") 
+Isso aqui é o que eu preciso para capturar o meu elemento.
+
+E como é que fazemos, como é que eu sei que isso estar funcionando? Eu vou dar um console.log exibindo esses dados. 
+console.log(document.getElementById("novoItem")) 
+A primeira coisa que eu preciso é esses dados aqui sincronizados e quando eu recarrego a minha página aqui tenho os dados funcionando.
+
+Tenho aqui o meu formulário então. Eu vou salvar isso aqui numa variável porque eu sei que é isso que eu vou usar daqui para frente. Eu vou criar uma 
+const form = document.getElementById("novoItem"), e agora eu quero simplesmente fazer essa operação.
+
+Que operação é essa, qual é a operação de um formulário sendo enviado? É o submit, então form.addEventlistener vai escutar por um evento de submit, 
+form.addEventlistener("submit")
+e quando aconteceu o evento de submit ele vai executar alguma função para mim. Eu vou criar aqui uma função anônima com uma declaração de uma arrow function, e aqui dentro eu posso fazer qualquer código. form.addEventlistener("submit", () => { }).
+
+Vou dar um console.log só para saber se essa operação estar funcionando, com uma string chamada "funcionou", se eu salvo e já carrego minha página, na hora que eu digito aqui "camisa preta", eu tenho que levar cinco, ele não retornou "funcionou". Por quê? Todo formulário por padrão envia os dados para algum lugar, aqui ele está enviando os dados para própria página e acaba não entrando na minha função.
+
+O que eu preciso fazer é interromper o comportamento. Eu preciso aqui pegar o evento padrão dele e vou interromper o comportamento com o evento.preventDefault(). Só que quem é "evento"? evento é o parâmetro que eu passo nessa função,form.addEventListener("submit", (evento) =>. É o que acontece lá. Na hora que acontece o submit me manda todos os dados e esses dados eu estou chamando de evento. 
+
+form.addEventListener('submit', (evento) => {
+    evento.preventDefault()
+
+    console.log(evento);
+
+Agora se eu entro aqui e tento botar uma camisa branca para viajar, eu sei que funcionou. Lembrando: o que eu quero aqui é pegar os dados do formulário e para pegar os dados do formulário posso simplesmente entender o que voltou nesse evento, o que estar acontecendo por baixo dos panos ali no JavaScript. Se eu adiciono novamente, ele me traz aqui um objeto gigante com tudo que estar rodando ali no JavaScript.
+
+Eu tenho aqui o que aconteceu no evento, quais são as tags envolvidas ali naquele evento, qual foi o source, qual foi o target, enfim, tem todas as informações aqui do elemento. Lógico também tem as informações que eu preciso capturar. Eu preciso capturar as informações que estão aqui no input nome e no input quantidade, e eu tenho algumas formas de chegar nesses inputs.
+
+A primeira delas é através de uma busca simples e direta, eu posso pegar aqui no meu objeto, e vocês já viram aqui essa estrutura, o target, ou seja, o alvo desse elemento tem aqui um array, na posição 0 ele também um input nome e na posição 1 tem um input quantidade. Posso fazer simplesmente isso aqui: eu posso pegar evento.target[0].value. Vamos dar um console.log nisso aqui para ver se é isso mesmo que eu quero.
+
+Na hora isso tem que carregar para mim a camisa branca. Perfeito. Se eu quiser a quantidade, eu vou no array 1 e pego a quantidade, evento.target[1].value. Aqui camisa branca e 1. Só que essa não é a melhor forma de buscarmos os elementos, porque eu estou indo em uma posição fixa. E se eu decido por acaso no meu formulário adicionar um novo campo? Toda a minha lógica para de funcionar. Toda a minha lógica criada baseada numa estrutura numérica, numa ordem para de funcionar e essa não é uma boa abordagem.
+
+Mas nesse mesmo objeto nós temos aqui dentro do target uma outra lista chamada elements, e olha só, o elements tem aqui um objeto com essas informações. Um objeto é legal, porque nós não precisamos navegar usando um número, nós podemos pegar um nome e para pegar um nome aqui no target eu vou botar target.elements e aqui ao invés do 0 eu vou botar o nome target.elements['quantidade']. Se eu salvar na minha página e carregar continua funcionando. Agora a partir do nome do input eu tenho os dados.
+
+    console.log(evento.target.elements['nome'].value);
+    console.log(evento.target.elements['quantidade'].value);
+
+Com essa estrutura, nós já somos capazes de receber esses dados, que a partir de agora eu quero que esses dados apareçam na minha lista.
+
+O que eu preciso? No meu arquivo “main.js", eu preciso agora criar um elemento, eu preciso criar um elemento através do JavaScript. A partir do momento que recebo esses dados, esses dados têm que ser criados. Aqui eu vou criar uma função e vou dar a ela o nome de criaElemento, olha que criativo. Na hora da programação, a sua função, a sua variável tem que ter o nome mais direto possível, quando você olha para ela novamente você tem que saber o que significa.
+
+Para criar um elemento preciso receber esses dados, eu preciso receber aqui como parâmetro um nome e uma quantidade, e eu preciso que toda vez que o formulário seja submetido essa função criaElemento seja acionada, passando também o nome e a quantidade.
+
+E eu já tenho essa busca aqui, eu posso botar aqui direto como parâmetro a minha função: 
+form.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+
+    criaElemento(evento.target.elements['nome'].value, evento.target.elements['quantidade'].value);
+})
+
+function criaElemento(nome, quantidade) {
+    console.log(nome);
+    console.log(quantidade);
+}
+O submit simplesmente chama a função criaElemento, e a função criaElemento agora sim vamos dar um console.log aqui no nome e vamos dar um console.log na quantidade, nos parâmetros que eu recebi da função e ver o que acontece no nosso navegador quando eu adiciono. Estar lá, a minha função está certa, aqui na linha 10 esse console.log foi disparado e na linha 10 é quando eu uso o nome.
+
+Legal. Eu preciso agora criar um novo item. Para criar um novo item no JavaScript também uso document, só que em invés do get.elementos vou botar aqui o document.createElement(‘li’) e eu vou criar aqui uma "Li". Por que uma "Li"? Se voltarmos no nosso HTML, cada item é aqui uma LI. Vou até colar aqui para ficar mais fácil lermos e não precisarmos voltar lá.
+<li class="item"><strong>10</strong>Cuecas</li>
+Só que tem reparem que esse "Li" também tem uma classe chamada item, então complicou um pouco a minha vida.
+
+Mas não, eu vou criar aqui uma const novoItem que vai receber esse "Li" criado. 
+const novoItem = document.createElement("li") 
+E agora no novoItem eu vou adicionar uma classe, novoItem.classList.add("item"). Já tenho a primeira parte resolvida, o que eu preciso então? Eu preciso agora do strong com esse valor. Vamos lá. Preciso de um novo elemento, então esse aqui vai ser o número do item que vai ter também um const numeroItem = document.createElement('strong').
+
+Agora que já tenho o strong eu preciso que o numeroItem receba a quantidade, só que isso daqui não é uma atribuição direta, eu estou falando de uma tag do HTML, então eu preciso aqui que o innerHTML receba a quantidade. 
+
+function criaElemento(nome, quantidade) {
+    const novoItem = document.createElement('li');
+    novoItem.classList.add("item");
+
+    const numeroItem = document.createElement('strong');
+    numeroItem.innerHTML = quantidade;
+}
+
+Nossa tag Strong já esta criada, já esta funcionando. O que precisamos? Precisamos que o novoItem receba isso, então 
+novoItem.innerHTML = numeroItem + nome 
+Pronto. Vamos lá agora dar um console.log(novoItem) e ver o que aconteceu. Não deu certo. Ao adicionar eu tenho uma "li", dentro da "li", no innerHTML, eu tenho um object.
+
+Quando nós criamos um elemento do HTML via JavaScript, não adicionamos o elemento dentro do outro como se fosse um conteúdo simples de HTML, porque vocês viram quando eu criei aqui este elemento a quantidade de coisa que ele criou junto, eu não criei o innerText, o inputmode, o isConnected, ele criou um objeto completo para mim e eu preciso agora lidar com esse objeto.
+
+Para resolver este elemento, que é um objeto aqui, nós precisamos entender um pouco melhor como funciona no JavaScript a inserção de um conteúdo dentro do outro, especialmente para elementos criados via JavaScript nós estamos criando um objeto inteiro.
+
+A manipulação desses elementos não é trivial. Ao invés do innerHTML, nós precisamos usar uma operação chamada appendChild, que vai inserir um elemento criado dentro do outro. Vamos primeiro executar essa operação aqui para saber se o nosso strong ficou dentro da "li". Aqui no innerHTML nós temos o strong com a tag. Agora conseguimos botar um elemento dentro do outro:
+
+novoItem.appendChild(numeroItem);
+
+Mas antes disso, eu preciso incrementar o novoItem e agora sim o innerHTML, já que ele já recebeu o nosso objeto, eu preciso acrescentar aqui o nome. 
+
+novoItem.innerHTML += nome;
+
+Se eu voltar no navegador e for lá de novo no innerHTML estar aqui o meu strong com a camisa branca, exatamente do jeito que eu preciso. Já temos o nosso elemento criado, precisamos inseri-lo na lista. A minha lista tem aqui a ul class "Lista".
+
+Eu vou adicionar um id aqui chamado lista também para que a manipulação do CSS seja toda via classe e a manipulação do JavaScript seja toda via id. ul class "Lista" id="lista". Eu vou criar uma nova const lista = document.getElementobyId("Lista"). Aqui por último a lista.appendChildId(novoItem) agora completo. Posso até tirar o console.log porque agora a nossa resposta será visual ao clicar. Pronto, a camisa branca está adicionada na nossa lista.
+
+    const lista = document.getElementById('lista');
+
+    lista.appendChild(novoItem);
+
+O grande detalhe aqui é entendermos essa interação dos elementos criados via JavaScript. Os elementos criados via Java Script são objetos, eles precisam ser manipulados como objetos através do appendChild. E olha só, todas as vezes que eu estou executando essa função estou criando essa constante lista novamente, ela não precisa estar aqui, ela pode estar declarada como uma variável comum ao nosso código inteiro e só ser chamada aqui na hora de adicionar.
+
+Esse é o código até agora:
+
+const form = document.getElementById('novoItem');
+const lista = document.getElementById('lista');
+
+form.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+
+    criaElemento(evento.target.elements['nome'].value, evento.target.elements['quantidade'].value);
+})
+
+function criaElemento(nome, quantidade) {
+    const novoItem = document.createElement('li');
+    novoItem.classList.add("item");
+
+    const numeroItem = document.createElement('strong');
+    numeroItem.innerHTML = quantidade;
+
+    novoItem.appendChild(numeroItem);
+    novoItem.innerHTML += nome;    
+
+    lista.appendChild(novoItem);
+}
+
+Eu não preciso a cada vez que eu crio um elemento também buscar esse elemento da lista. Agora, assim que eu adiciono, funciona. Só que temos um grande problema aqui: eu quero uma lista para viagem que eu não me esqueça de mais nada, só aqui se eu recarrego a página do navegador a lista se perde. Vamos resolver isso usando o Local Storage.
+
+Aula 2 - Armazenando dados na web
+
+Vamos aqui, por exemplo, olhar o site da Alura. Se vocês abrirem a ferramenta de desenvolvedor, vou abrir aqui novamente, e forem na parte de "Storage", aqui estou usando o Firefox, no Chrome tem a mesma coisa, vocês vão vir aqui várias oportunidades de armazenamento, tem os "Cookies", tem o "Index DB", tem o "Local Storage" e tem o "Session Storage". O "Local Storage" é o que nós vamos usar. 
+
+Ele traz várias informações aqui, reparem que tem um data, tem creation, aqui no Alura tem informações sobre de onde veio, qual URL que você veio. Tem aqui várias informações para serem usadas para uma melhor experiência para o usuário. Isso acontece em todos os sites hoje em dia. 
+
+Se nós formos ao console, podemos ver como funciona o Local Storage no dia a dia, inclusive podemos dar um console.log(localStorage), reparem que o "l" é minúsculo inicial e o "S" maiúsculo no meio.
+
+Isso aqui é um objeto, então se eu vier a localStorage.smcid ele me retorna aquela informação, estou acessando um objeto e aqui eu consigo manipular assim. Se eu quiser inserir uma informação, localstorage.setItem, eu estou criando um item. Só que aqui um detalhe muito importante: como é um objeto, temos que passar um par de informações aqui de chave e valor. Chave é o que eu vou usar para acessar e o valor é o que eu quero inserir.
+
+localStorage.setItem("curso", "localStorage")
+
+Aqui no setItem vamos ver aqui o curso e o valor é Local Storage. Que curso estamos vendo? Então para eu pegar essa informação posso ir direto no objeto, no objeto curso e ele traz a informação ou no localstorage.getItem("curso"), passando ali aquela chave que eu cadastrei, ele traz esse dado.
+
+Eu posso ainda dar um localstorage.removeItem("curso") e eu a partir de agora não tenho mais ele se eu tentar buscá-lo novamente. E se eu quiser de uma maneira geral limpar isso tudo aqui ainda tem a função do clear, que se eu botar aqui o localstorage novamente vem vazio, esse Storage não tem nada. E se eu for aqui no Local Storage, ele está limpo.
+
+Você não precisa gravar essas operações, nós iremos usá-las para, a partir de agora, escrever no Local Store toda vez que salvarmos uma informação, atualizar o Local Storage, mudar o número de itens que queremos levar na nossa viagem e por aí vai. O próximo passo é salvar essa informação no navegador usando o Local Storage.
+
+Vamos melhorar o nosso código para que depois que ele cria o elemento também esvazie o formulário? Aqui eu quero que agora o meu evento.target.elements["nome"].value receba vazio e o nome vai ficar vazio. Será que isso aqui vai funcionar? Está ali, nosso elemento estar limpo. Aqui também o evento.target.elements["quantidade"].value também vai receber vazio. Legal.
+
+evento.target.elements['nome'].value = ''
+
+Todas as vezes que eu enviar o meu item, ele esvazia o formulário. Existe uma coisa aqui que não está legal, que é chamar o elemento duas vezes. Eu poderia exportar isso aqui em uma variável, chamar isso aqui de const nome = evento.target.elements["nome"] e const quantidade = evento.target.elements["quantidade"]. Eu só acesso aquele elemento uma única vez, e aqui eu posso diminuir meu código para criaElemento(nome.value, quantidade.value).
+
+Dentro da form.addEventListener('submit', (evento)
+    const nome = evento.target.elements['nome'];
+    const quantidade = evento.target.elements['quantidade'];
+
+    criaElemento(nome.value, quantidade.value);
+
+    nome.value = ''
+    quantidade.value = ''
+
+Nosso elemento está sendo salvo e agora quando criou elemento preciso registrar isso no Local Storage. Eu já tenho aqui o nome e a quantidade, o que eu preciso fazer é um localstorage.setItem, como nós já vimos, chamar isso aqui, como chave, de nome e passar como conteúdo o nome. localstorage.setItem("nome", nome).
+
+Também precisamos fazer um outro setItem passando a quantidade e aqui passando a quantidade, localstorage.setItem("quantidade", quantidade). Passar o nome e a quantidade para o elemento na hora que eu adiciono a camisa preta com 30, ele adiciona na minha página, no Local Storage ele também estar lá registrado, item, nome, quantidade, e no Local Storage também estar lá registrado o nome e a quantidade. 
+
+Dentro da function criaElemento(nome, quantidade)
+    localStorage.setItem("nome", nome);
+    localStorage.setItem("quantidade", quantidade);
+
+Já conseguimos salvar as nossas informações no Local Storage. Vamos então adicionar mais um item aqui que vai ser a camisa branca, eu quero levar uma camisa branca mesmo eu não usando, e o nosso Local Storage foi sobrescrito, agora eu não tenho mais a camisa preta armazenada aqui, eu só estou armazenando um único item. Afinal de contas, eu estou usando uma única chave nome e uma única chave quantidade, e estou sempre sobrescrevendo. No JavaScript, toda vez que temos um par de elementos, toda vez que temos uma chave e valor e queremos salvar o que se chama de dicionário daquilo ali, usamos um objeto.
+
+Vamos transformar esse elemento chamado itemAtual em um objeto. Um objeto que vai ter nome e um objeto que vai ter a quantidade, const itemAtual = { "nome": nome, "quantidade": quantidade}. Agora ao invés de enviarmos duas informações vamos enviar uma única informação chamada itemAtual, e vamos chamar isso aqui de item. Se usarmos o Local Storage novamente, vou deixa-lo aberto aqui, vou salvar 20 camisas pretas dessa vez. Está lá o nosso item.
+
+Repare que ele salvou isso aqui como um object, não é exatamente isso que queremos. O Local Storage só lê um elemento do tipo Json, ele só em uma string. Toda vez que mandamos um objeto não estamos chamando isso de uma string, é realmente um objeto. Nós precisamos transformar esse elemento em uma string e fazemos isso através do json.stringify. stringify é transformar em uma string.
+
+localStorage.setItem("item", JSON.stringify(itemAtual));
+
+Como o LocalStorage só salva um texto, precisamos transformar o nosso objeto em texto, então a partir de agora quando salvarmos aqui a camisa preta com 20 itens no nosso Local Storage, já vou deixar aberto, ele salvou aqui com as chaves com a representação de um objeto. Ótimo. Se eu salvar agora a camisa branca, ele ainda está sobrescrevendo, ou seja, não precisamos somente de um objeto para armazenar naquele elemento todos os itens, nós precisamos de um array de objetos, nós precisamos de uma sequência de objetos.
+
+const itens = []
+
+Para fazer isso, vamos criar um array. Esse array vai ser declarado do lado de fora da nossa função, chamado itens, já que nós queremos usá-lo várias vezes e o itemAtual vai ter que ser inserido agora no itens, itens.push é a função para inserir um elemento no array.
+
+itens.push(itemAtual);
+
+E agora passamos o itens lá para o Local Storage. 
+
+localStorage.setItem("item", JSON.stringify(itens));
+
+Se eu passar agora aqui a camisa branca com 10 itens, repara que ele salvou agora um array, tem aqui a representação do array. Assim, nós conseguimos inserir mais elementos no nosso Local Storage. Isso aqui, esse nome e essa quantidade, agora são irrelevantes, podemos chegar aqui e fazer um localstorage.clear para limpar tudo e agora podemos limpar a nossa página e começar do zero sabendo que as informações serão persistidas aqui da forma correta. Legal.
+
+Estou então montando a minha lista. Só para deixar tudo muito claro, toda vez que eu preciso criar um grupo de elementos, um grupo de informações referentes aquele mesmo elemento, eu crio um objeto e aqui eu tenho o par chave valor dentro do objeto, nome/nome, e toda vez que eu preciso juntar esse grupo de informações em um único lugar, eu crio um array com esses grupos, nesse caso um array de objetos.
+
+O Local Storage só nos deixa guardar string, por isso tivemos que usar o método stringify Json para guardar todos esses elementos em uma string. É isso. É assim que vamos sempre interagir inserindo os dados no Local Storage.
+
+Agora que os dados já estão inseridos, você já deve imaginar: eu quero que ao carregar essa página essa lista não exista mais no HTML, ela exista unicamente na memória do nosso navegador e eu posso acessa-la e criar os elementos através da lista.
+
+***Nota:
+Até aqui, vimos que localStorage armazena dados do tipo texto string e, para armazenar objetos, arrays, e listas, é preciso convertê-los utilizando o método JSON.stringify(). Já quando queremos acessar algum dado, podemos utilizar o método localStorage.getItem().
+
+Os tipos de dados armazenados no localStorage não devem ser considerados sensíveis, de acordo com a LGPD (Lei Geral de Proteção de Dados). Isso ocorre, pois ele não possui nenhuma camada de proteção, e os dados podem ser acessados facilmente por terceiros. Dados considerados sensíveis, devem ser armazenados em Cookies.
+
+Você pode acessar os dados salvos no seu navegador na ferramenta Inspecionar, clicar em Aplicativo e depois em Armazenamento Local, na opção do menu lateral. Os dados estão salvos dentro do domínio do site que você acessou. localStorage é uma mão na roda para salvarmos conteúdos de interface, principalmente aqueles que não precisam ser salvos em um banco de dados, e podem ser públicos.
+
+Aula 3 - Interagindo com dados da web
+A nossa página já está salvando os itens, criando elementos na página e salvando no Local Storage. Eu já tenho aqui a camisa preta, já tenho a camiseta branca salva, tudo que eu salvar aqui ele vai incrementar, por exemplo, o celular, ele vai salvando aqui.
+
+O grande problema que ainda não resolvemos é ao recarregar a tela, ele ter os dados aqui. Ele já existe no Local Storage, mas ele ainda não está preenchendo na nossa página, precisamos agora trazer esses dados para poder manipulá-los.
+
+Para trazer esses dados vamos ter que fazer uma consulta ao nosso Local Storage. Como já fizemos um setItem vamos fazer um getItem e vamos fazer nos nossos itens, já temos um array de itens e vamos chamá-los agora. E aqui eu já comecei a usar o plural, mas ainda não refatorei. Eu vou até limpar o meu Local Storage, se você vier com o botão direito e deletar ele limpo o seu Local Storage para agora sempre chamá-lo de itens, porque ele pode ser no plural.
+
+localStorage.setItem("itens", JSON.stringify(itens));
+
+Ao carregar os meus itens, ao carregar a minha página, ao carregar esse documento eu preciso pegar tudo que tem lá. Aqui, ao invés de eu criar um array vazio, eu vou primeiro ver se existe alguma coisa lá no localstorage.getItem passando aqui os itens, mas se isso for falso eu quero que ele crie um array vazio. Com essa estrutura aqui eu consigo consultar lá.
+
+const itens = localStorage.getItem('itens') || []
+
+Nosso Local Storage agora está vazio, eu vou adicionar dez camisetas pretas, vou adicionar o item camiseta branca e vou adicionar o celular. Se eu recarrego a minha página, eu vou até botar um console.log(itens) aqui nos itens para vermos isso aqui funcionando, se eu recarrego a minha página eu vejo que consegui pegar os itens.
+
+Agora eu preciso iterar nesse array para criar esses elementos, vamos começar de uma forma bem simples, vamos dar só um console.log. Um array, toda vez que eu preciso fazer um loop eu posso usar um foreach, no foreach eu passo aqui o meu elemento, o elemento que ele está nesse momento usando, e faço alguma coisa. Eu quero dar um console.log(elemento).
+
+itens.forEach ( (elemento) => {
+    console.log(elemento);
+})
+
+Vamos para nossa página e conseguimos pegar o array, mas ele não consegue executar essa função no array, ele diz que tem um erro aqui de alguma coisa está indefinida, tem um erro no tipo aqui. Nós estamos tentando fazer a operação foreach nesse elemento.
+
+O navegador é muito bom em nos ajudar a entender esses erros, porque se você usa isso aqui no dia a dia e conforme você vai desenvolvendo, você vai criando ainda mais experiência em tratar esses erros você consegue identificar que tem alguma coisa errada nessa linha, ela não está aqui usando a troca de cores que o navegador já faz, que o nosso editor de código já faz, ele não está usando syntax highlighting.
+
+Eu vou fazer o seguinte, só para você acompanhar comigo, eu vou dar um console.log em um array vazio, só para você entender exatamente o que eu estou falando. Aqui, esse array mesmo vazio ele está lá mostrando como é o array, ele está usando o tipo array, está dizendo que está vazio e está dizendo “length=0”, mas aqui não porque ele é uma *string.
+
+Lembra que ao enviar os dados para o Local Storage nós transformamos aquilo tudo em uma string? Fizemos o stringify e precisamos agora quando recebe esses dados transformar esses dados para o JavaScript e fazemos isso através do Json.parse, mandamos ele parsear isso tudo aqui.
+
+const itens = JSON.parse(localStorage.getItem('itens')) || []
+
+Agora quando eu recarrego a minha página, aí sim, ele já está identificando o que é um array, que tem ali um length de três itens e cada um desses itens ele também identifica como um objeto, esse objeto tem um nome e quantidade. No nosso foreach aqui onde temos o console.log, já estamos usando o nome e quantidade.
+
+const itens = JSON.parse(localStorage.getItem('itens')) || []
+
+itens.forEach ( (elemento) => {
+    console.log(elemento.nome, elemento.quantidade);
+})
+
+Eu estou imprimindo todos os itens que estão no meu Local Storage, agora eu só preciso chamar essa função, a função criar elemento, e iterar naquele array ali criando os elementos.
+
+Na nossa programação inventamos um problema, porque ao criar um elemento nós também nessa função estamos escrevendo uma quantidade de coisas lá no setItem. Vamos fazer um loop aqui para criar o elemento e atualizar a nossa lista que não vai funcionar. Precisamos refatorar o nosso código para que essa operação seja feita no envio do formulário.
+
+Nós temos aqui um problema de lógica que foi propositalmente criado para que você como desenvolvedor tenha cada vez menos medo da refatoração. Um código evolui gradualmente, você não precisa pensar em todas as operações, você pode ir executando e aprendendo com o desenvolvimento e melhorando. É assim que fazemos, é assim que um bom código é criado. Não é isoladamente pensando qual é a melhor solução e implementando a melhor solução, é fazendo e experimentando.
+
+Nós vimos aqui que para inserir no Local Storage nós precisávamos criar um objeto. Por que estamos criando esse objeto dentro da função criar elemento? Por que a função criar elementos já recebe esses dados prontos? Vamos experimentar fazer isso, vamos experimentar tirar toda essa gestão do Local Storage de dentro do criar elemento e trazer para que dentro da criação do item, quando o usuário preenche o item nós aqui podemos criar o nosso objeto, item atual, e repare que eu não estou reescrevendo aqui, eu estou só primeiro recortando.
+
+form.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+
+    const nome = evento.target.elements['nome'];
+    const quantidade = evento.target.elements['quantidade'];
+
+    const itemAtual = {
+        "nome": nome.value, 
+        "quantidade": quantidade.value
+    }
+
+    criaElemento(itemAtual);
+
+    itens.push(itemAtual);
+
+    localStorage.setItem("itens", JSON.stringify(itens));
+
+    nome.value = ''
+    quantidade.value = ''
+})
+
+O nosso item atual vai ser criado aqui, mas agora o que preenche esse tem atual? Não é só o nome, porque o nome é só o elemento do array, é o nome.value. A quantidade também, é quantidade.value.
+
+O nosso objeto aqui já está funcionando para o Local Storage, ele esperava receber dois valores e o que precisamos é modificar um pouco o criaElemento. Ao invés dele receber dois valores, ele vai só passar o item atual. E aqui ao invés de ter dois parâmetros ele recebe um objeto, que podemos chamar de item, e agora ao invés de acessar direto a variável quantidade acessamos o objeto item na posição quantidade e o objeto item na posição nome.
+
+Agora ao criar um elemento ele pega o objeto, nós também inserimos esse objeto no nosso array e também insere esse array no Local Storage.
+
+Uma refatoração que não é complexa, mas que agora deixou o nosso código completamente dinâmico. Nós também precisamos chamar agora a função criar elemento toda vez que carregamos a página, ao invés do console.log eu vou criar o elemento. Lembre-se, agora a nossa nova versão do criaElemento não precisa receber dois itens ela recebe um único objeto e esse objeto é o objeto elemento ao recarregar a página.
+
+itens.forEach ( (elemento) => {
+    criaElemento(elemento);
+})
+
+Aqui estão todos os nossos itens criados, não precisamos mais do HTML criando essas coisas (deleto os itens do html), a nossa lista começa vazia e simplesmente carrega tudo que existe no Local Storage. Podemos adicionar aqui ainda uma bermuda, vou botar três bermudas que eu quero levar na viagem, uma calça e quando eu recarrego a página está tudo ali bonitinho.
+
+De novo, nós refaturamos o nosso código para que a responsabilidade da função criar elemento seja única e exclusiva para criar o elemento, nós refatoramos o nosso submit, o enviar do formulário para que ele agora gerencie todas as funções que precisam ser gerenciadas neste momento do envio do item, e nossa página é carregada buscando os dados no Local Storage, iterando em cima deles e criando cada um dos elementos.
+
+Código até agora:
+const form = document.getElementById('novoItem');
+const lista = document.getElementById('lista');
+const itens = JSON.parse(localStorage.getItem('itens')) || []
+
+itens.forEach ( (elemento) => {
+    criaElemento(elemento);
+})
+
+form.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+
+    const nome = evento.target.elements['nome'];
+    const quantidade = evento.target.elements['quantidade'];
+
+    const itemAtual = {
+        "nome": nome.value, 
+        "quantidade": quantidade.value
+    }
+
+    criaElemento(itemAtual);
+
+    itens.push(itemAtual);
+
+    localStorage.setItem("itens", JSON.stringify(itens));
+
+    nome.value = ''
+    quantidade.value = ''
+})
+
+function criaElemento(item) {
+    const novoItem = document.createElement('li');
+    novoItem.classList.add("item");
+
+    const numeroItem = document.createElement('strong');
+    numeroItem.innerHTML = item.quantidade;
+
+    novoItem.appendChild(numeroItem);
+    novoItem.innerHTML += item.nome;    
+
+    lista.appendChild(novoItem);
+}
+
+O próximo desafio é que se eu agora adicionar a mesma camiseta preta e botar 30 itens aqui ele criou mais uma vez. Será que tem como só atualizarmos esse item do Local Storage? 
+
+**Diferentes armazenadores de dados
+Cookies, localStorage e sessionStorage são formas de armazenar dados no navegador, porém existem diferenças na usabilidade de cada um. Vamos conferir estas diferenças abaixo:
+
+localStorage guarda informações de forma persistente no navegador, sendo em média 5MB de armazenamento padrão, podendo variar dependendo do navegador utilizado. Este limite pode ser aumentado pelo usuário quando necessário, no entanto apenas alguns navegadores suportam isso. Os dados salvos são apenas do tipo string texto.
+
+Cookies guardam informações de forma persistente no navegador, sendo até 4KB de armazenamento por Cookie, bem menos que localStorage. Cada cookie é como se fosse um arquivo criado que guarda as informações de acesso da pessoa usuária, por exemplo, de qual local o site foi acessado, qual e-mail foi utilizado ao realizar login no navegador, e quais produtos de um site foram clicados. Para acessá-los, muitas empresas criam pop ups para confirmar a autorização do uso dessas informações, pois são consideradas sensíveis.
+
+sessionStorage é similar ao localStorage, sua diferença é que os dados não são salvos de forma persistente, ou seja, ao fechar o navegador eles são perdidos. Este tipo de armazenamento é utilizado quando queremos que a pessoa usuária utilize os dados apenas enquanto estiver com o site aberto.
+
+Aula 4 - Atualizando um item
+Meu último desafio para você foi atualizar cada um desses itens. Eu já selecionei que na minha mochila de viagem eu quero botar 10 camisas pretas, mas e se eu quiser levar 15? Hoje, se eu adiciono camisa preta e boto 15 aqui, ele vai simplesmente adicionar mais uma linha e não é isso que eu quero. Eu quero que a minha lista seja atualizada. Digamos que eu ia viajar por 10 dias e agora vou viajar por 15 dias, preciso atualizar a minha lista por completo.
+
+Para isso, eu preciso modificar o meu código para que ele adicione essa funcionalidade. A primeira coisa é: já que vamos ter que atualizar o Local Storage, vamos ter que atualizar também a tela. Separamos o desafio em dois e vamos começar atacando a atualização da tela primeiro. Para atualizar a tela, eu vou precisar encontrar aqui o elemento camisa preta, então vamos busca-lo.
+
+Eu vou criar aqui ao submeter o formulário uma constante chamada existe, para saber se aquele elemento já existe na minha lista. A minha lista nada mais é do que o array const existe = itens.ind(). Eu vou buscar no meu array itens aquele elemento. Qual é o elemento que eu estou buscando? Eu estou buscando aqui o elemento .nome, const existe = itens.find(elements => elemento.nome).
+
+Eu estou olhando todos os meus elementos do array na posição nome, um a um, e eu quero que ele seja exatamente igual a nome.value, que é exatamente o que eu digitei no meu formulário.
+
+const existe = itens.find(elemento => elemento.nome === nome.value);
+
+Agora então eu já sei se existe ou se não existe. Vamos fazer um teste, console.log(existe). Agora se eu digito "camisa preta" e a quantidade "1", ele deveria me retornar que sim, e se eu digito, por exemplo, "bermuda", que não tem na minha lista, ele também vai me retornar que aquele não está definido. Agora que o elemento está definido, eu preciso fazer uma condicional.
+
+Eu preciso: se existe e for diferente de vazio, for diferente de undefined, se existe realmente existir, if (existe) { }, eu preciso criar um elemento de controle nos meus itens. O melhor elemento de controle que existe um id. Um id serve para eu fazer o match perfeito, serve para fazer a busca perfeita. No meu itemAtual eu vou adicionar um id, só que se eu quero que o itemAtual tenha um id, o itemAtual precisa estar declarado antes.
+
+Aqui eu vou adicionar um id no meu itemAtual. Esse id vai ser, por exemplo, o id do elemento existe, itemAtual.id = existe.id. "Pedro, mas na hora de criar o elemento não estamos botando um id?" Vamos resolver isso. Na hora de criar um elemento aqui eu preciso adicionar um id e vou adicionar um id usando a propriedade dos data atributes. Aquilo que no HTML podemos inventar qualquer coisa aqui, dataid = 0., podemos botar datafarofa =0. Podemos criar qualquer elemento aqui no nosso HTML.
+
+Já que eu estou fazendo isso via JavaScript, eu vou botar no meu elemento strong um atributo e por aqui eu o chamo ele numeroItem.dataset.id. Como que eu quero fazer esse id aqui? Eu preciso que ele seja um id incremental, eu preciso que no primeiro elemento da minha lista seja 0 ou 1 e no segundo elemento da minha lista seja 2. Para criar isso aqui, eu preciso que o item tenha uma propriedade id, numeroItem.dataset.id = item.id.
+
+Na function criaElemento:
+numeroItem.dataset.id = item.id
+
+Se ele existe, eu quero que o id fique o mesmo, mas se ele não existe, se esse elemento não existe, eu preciso criar esse elemento, jogar esse elemento no array, mas antes disso eu preciso criar um id para ele. Se ele não existe, o id atual vai ser o tamanho do meu array, itemAtual.id = itens.leng. Se só tiver um item o id vai ser 1, se tiver dois itens o id vai ser 2, e por aí vai.
+
+    if (existe) {
+        itemAtual.id = existe.id;
+        atualizaElemento(itemAtual);
+    }
+    else {
+        itemAtual.id = itens.length;
+
+        criaElemento(itemAtual);
+
+        itens.push(itemAtual);
+    }
+
+Vamos fazer o seguinte: vamos limpar o nosso Local Storage e entender o que está acontecendo aqui. Eu vou adicionar camisa preta com 10, ele continua adicionando aqui no meu Local Storage e agora já veio com a propriedade id 0, que era o tamanho do meu array. Se eu recarrego a página e eu inspeciono esse elemento aqui, agora o strong já estar com data-id 0.
+
+No console, quando eu adiciono a camisa preta, já existe e o id é 0, então o id é exatamente o id do nosso strong. Já criamos uma referência aqui. Toda vez que eu tento adicionar, se o elemento existir, pronto, já tenho o id.
+
+O que eu preciso fazer agora? Além da função criaElemento, preciso aqui ter uma função chamada atualizaElemento, que também vai receber como parâmetro o itemAtual, que agora já está atualizado com o id, atualizaElemento(itemAtual). Vamos criar uma função aqui chamada atualizaElemento, que vai receber um item que só precisamos encontrar esse strong aqui para atualizá-lo. Aqui que vem o grande pulo do gato do dataset, do dataattribute, function atualizaElemento(item) { document.querySelector("[data-id='=+item.id+"']").
+
+function atualizaElemento(item) {
+    document.querySelector("[data-id='"+item.id+"']");
+}
+
+Vamos dar um console.log nisso aqui só para que você entenda perfeitamente o que está sendo digitado. Se um item já existir, por exemplo a camisa preta, vai me dar aquele strong do id 0, eu estou buscando pelo id 0. E com essa query aqui eu estou batendo exatamente nele. Vamos fazer o seguinte: vamos adicionar a camisa branca aqui para que fique muito claro que não foi uma coincidência. Aqui no nosso console, o data-id foi 1, que o primeiro foi o elemento 0 e o segundo foi o elemento 1.
+
+Eu não preciso mais do console.log. O que eu preciso então é atualizar o valor disso aqui. Como é uma tag HTML, innerHTML vai receber quem? O nosso item.quantidade. function atualizaElemento(item) { document.querySelector("[data-id='=+item.id+"']").innerHTML = item.quantidade}. Excelente. Agora quando eu boto camisa preta e sei que eu tenho que levar 15, estar aqui, o elemento foi atualizado.
+
+function atualizaElemento(item) {
+    document.querySelector("[data-id='"+item.id+"']").innerHTML = item.quantidade;
+}
+
+Vamos voltar um pouco porque não ficou tão trivial esse código. A partir de agora toda vez que nosso formulário é enviado, nós perguntamos ali aos itens se aquele elemento já existe. Fazemos um find no nosso array para saber, tentando encontrar os dois nomes, se aquele elemento já existe. Se o nome é encontrado, só atualizamos o elemento, se o nome não é encontrado, criamos o elemento do zero.
+
+Repare aqui que nós criamos o id a partir do que já existe. Se o elemento já foi encontrado, não inventa nada, só use como itemAtual o id que já existe. Agora, se o elemento não foi encontrado, ou seja, se estamos adicionando esse elemento ao fim do array, me diz o tamanho do array para que eu possa criar o id. Simples.
+
+Também modificamos o nosso criaElemento para adicionar o dataset.id lá dentro do strong e, por fim, buscamos isso para atualizar a quantidade. Só que se você está bem atento o nosso Local Storage não foi atualizado, aqui ainda temos somente 10 camisas pretas na minha mochila de viagem, isso porque o meu array de itens só é atualizado quando eu crio um elemento e não quando eu atualizo um elemento.
+
+E nós estamos aqui escrevendo no Local Storage somente quando temos os itens. O que precisamos então? Atualizar a nossa lista de arrays sempre que um item for atualizado para ir, por fim, atualizar o Local Storage.
+
+Eu tenho aqui 5 camisas brancas e 10 camisas pretas e digamos que agora eu realmente só queira levar uma camisa branca.
+
+A minha interface está sendo atualizada, o meu elemento está sendo atualizado com essa função nova que criamos, atualiza elemento, mas o meu Local Storage continua com o item atrasado, ele continua lá com o meu objeto camisa branca com a quantidade 5, ele não está refletindo a nossa página.
+
+Eu propositalmente não falei antes, mas o comportamento do Local Storage muita gente pensa que é igual a um banco de dados, ele até tem uma função que é o localStorage.key() que você teoricamente pode acessar o ID, você pode acessar como um array, você pode acessar o elemento 0. Só que o detalhe é que o elemento 0 é o elemento itens, é o elemento-chave, não é o nosso valor.
+
+Se eu tentar aqui fazer um Local Storage que um para achar a camisa branca ele não vai encontrar. Aqui o Local Storage tem a chave e o valor, o key e o value. O itens é o primeiro é na ordem 0 e o valor é toda aquela string, buscar usando a função key do Local Storage não é muito útil. Assim, inclusive, esse método eu não consigo nem pensar em uma aplicação disso onde eu vá querer o quinto do meu Local Storage, é muito específico.
+
+O Local Storage por armazenar uma string, serve como um objeto meio descartável. Todas as vezes que queremos atualizar o Local Storage nós simplesmente escrevemos por cima, ele vai descartar a gravação anterior, que estava guardado na memória anteriormente e vai adicionar o item novo.
+
+Simples, a única coisa que precisamos fazer toda vez que atualizamos um elemento é atualizar o nosso array. Para atualizar o nosso array nós precisamos achar a posição onde está o nosso conteúdo e também sobrescrever. A posição que está o nosso conteúdo é o existe.id, eu vou no nosso array de itens na posição existe.id e vou trocar o conteúdo dele, vou escrever por cima do conteúdo dele o item atual, itens(existe.id) = itemAtual.
+
+    if (existe) {
+        itemAtual.id = existe.id;
+
+        atualizaElemento(itemAtual);
+
+        itens[existe.id] = itemAtual;
+    }
+    else {
+        itemAtual.id = itens.length;
+
+        criaElemento(itemAtual);
+
+        itens.push(itemAtual);
+    }
+
+    localStorage.setItem("itens", JSON.stringify(itens));
+
+Aqui eu já estou fazendo um setItem passando os itens com o array itens transformado no stringify, isso aqui sempre vai acontecer. Quando eu crio um elemento eu estou dando um push no meu array e estou passando itens e quando eu atualizo o meu elemento, se o elemento já existe eu só troco o conteúdo no meu array e passo para o Local Storage.
+
+Vamos ver o que acontece aqui. Eu vou adicionar um celular só para garantir que continua funcionado e agora eu quero levar 15 camisas pretas e aí quando eu clico aqui para adicionar ele atualiza direto no meu Local Storage e atualiza a tela. Se eu quiser levar só uma camisa branca é a mesma coisa, ele sobrescreveu o meu conteúdo salvo no Local Storage.
+
+Essa é a forma como trabalhamos com Local Storage. Por ser uma string, por ser um conteúdo de texto temos que tratar e sobrescrever. E agora, se por acaso eu desistir de levar a camisa branca, o que eu faço? 
+
+Aula 5 - Removendo um item
+
+Para remover um item, o que eu quero? Eu quero que esses itens sejam clicáveis, eu quero que ao clicar em cada um desses itens, eu possa removê-los. Vamos começar adicionando esta funcionalidade. Você já entendeu o padrão, primeiro nós vamos mexer na nossa página e depois interagir com o Local Storage.
+
+Para mexer na nossa página nós precisamos criar um botão que quando clicado deleta o nosso item. Aqui, a nossa função criaElemento serviu o propósito de aprender até agora como criar, como manipular um elemento, mas idealmente separamos as responsabilidades. Vamos começar a fazer isso. Nós vamos criar uma função chamada function botaodeleta e essa função é quem vai realmente criar o nosso elemento.
+
+function botaoDeleta() {
+    const elementoBotao = document.createElement("button");
+    elementoBotao.innerText = "X";
+
+    return elementoBotao;
+}
+
+Agora, o que eu preciso fazer? Eu preciso retornar o return elementoBotao.
+
+No function criaElemento:
+novoItem.appendChild(botaoDeleta());
+
+Toda vez que a função botaoDeleta for chamada, ela me retorna com o botão. Quando vamos no nosso navegador, aqui todos os itens já foram criados com o nosso botão aqui. 
+
+Existe uma coisa sobre a criação de elementos via JavaScript, especialmente elementos de botão, eles não recebem o addEventListener na leitura da página, assim como o nosso formulário fez. O nosso formulário, na hora que o JavaScript foi carregado, adicionou esse evento lá no nosso form, só que os nossos elementos de botão estão sendo criados dinamicamente, esse JavaScript não vai ler a página novamente, então precisamos já criar esse elemento com o evento associado. O elementoBotao.addEventListener("click"). Eu não quero fazer nada demais aqui, eu quero só dar um console.log("click"). 
+
+    elementoBotao.addEventListener("click", () => {
+        console.log('click');
+    })
+
+O click aconteceu no nosso botão e estar acontecendo aqui, já aconteceu três vezes. Repara o seguinte: aqui os arrow function e ela é maravilhosa, já usamos para vários itens aqui, já usamos ela no nosso find, mas uma das coisas que eu quero fazer é que quando esse elemento for clicado eu quero saber quem foi o elemento clicado, quem foi o box clicado aqui, quem foi o item clicado.
+
+E a arrow function não carrega o this do JavaScript para frente, então aqui eu não posso usá-la, aqui eu tenho que usar realmente a declaração de uma função para que eu possa usar o this, então console.log(this). Eu quero saber quem foi o elemento clicado e quando clico eu sei que foi este botão especificamente, foi este elemento, foi esse nó do meu HTML.
+
+    elementoBotao.addEventListener("click", function() {
+        deletaElemento(this);
+    })
+
+Eu quero passar para frente, eu quero chamar uma função que vai deletar esse elemento. Em vez de console.log eu vou chamar a função deletaElemento(this). Eu tenho a criaElemento e agora eu tenho o deletaElemento. O que a função deletaElemento vai fazer? A função da deletaElemento vai receber um parâmetro, receber um elemento do HTML, vamos até chamar tag aqui e vai remover aquela tag, tag.remove. Simples assim.
+
+function deletaElemento(tag) {
+    tag.remove();
+}
+
+Agora quando eu carrego, eu removi o elemento, mas eu removi o elemento do botão e não é ele que eu quero remover. Se eu inspecionar o elemento aqui, o botão é filho do meu "li", então quem eu quero passar para frente aqui é o this.parentNode. deletaElemento(this.parentNode). Agora quando eu clico para remover, ele remove o elemento inteiro, quando clico para remover, ele vai removendo tudo.
+
+    elementoBotao.addEventListener("click", function() {
+        deletaElemento(this.parentNode);
+    })
+
+Lógico, o meu Local Storage só ainda está fixo, eu ainda preciso tratar o meu Local Storage, mas eu já consigo aqui remover os meus elementos. Já conseguimos remover o elemento clicando no "X" aqui, mas quando eu recarregar a página este elemento volta. Esse é o nosso último desafio para concluirmos esse projeto.
+
+Já temos aqui a nossa função deletaElemento. A função deletaElemento precisa fazer o que agora? A nossa gestão do Local Storage é através do array itens, sempre o atualizamos e enviamos para o Local Storage, então quando deletamos, o que precisamos fazer? Precisamos aqui remover um item do array e depois escrever no Local Storage. Vamos primeiro remover o item do array.
+
+Como é o array que estamos usando? É o array itens. Para removermos um item fazemos um splice. Dizemos aqui o que queremos remover e removemos um item a partir daquela posição, itens.splice["o que queremos remover", 1]. Só que o splice funciona no índice do array, na posição onde o elemento estar, na posição 0, na posição 1, na posição 2. Qual é essa posição? A posição é o nosso id, é o id que usamos. Aqui dentro do splice precisamos ter o id para poder achar o elemento.
+
+A função deletaElemento precisa receber o id daquele nosso elemento. Bem, se a função deletaElemento precisa receber, também precisamos enviar o id, precisamos que o id exista aqui. Se o id é um parâmetro aqui no botaoDeleta, ele também precisa ser um parâmetro na nossa função. Agora, ao chamarmos a função botaoDeleta precisamos que o id exista. Para fazer isso, simplesmente vamos pegar aqui o item.id.
+
+novoItem.appendChild(botaoDeleta(item.id));
+
+function botaoDeleta(id) {
+    const elementoBotao = document.createElement("button");
+    elementoBotao.innerText = "X";
+
+    elementoBotao.addEventListener("click", function() {
+        deletaElemento(this.parentNode, id);
+    })
+
+    return elementoBotao;
+}
+
+function deletaElemento(tag, id) {
+    tag.remove();
+
+    console.log(id)
+}
+
+Agora estamos passando o id para o botaoDeleta, botaoDeleta está chamando o deletaElemento quando clicado, passando o id como parâmetro. Vamos ver se isso aqui funcionou. console.log(id). Ao remover um elemento, eu vou dar o console.log no id daquele elemento. Excelente. Agora que o id existe, eu só preciso removê-lo. Mas para removê-lo, onde está esse elemento que tem o id específico?
+
+Porque eu não estou indo pela posição, o id pode ser um número diferente da posição. Eu preciso procurar esse elemento dentro do meu array e para procurar um elemento vou usar aqui itens.splice(itens.findIndex[]), ele vai me retornar o index de um elemento qualquer. Eu passo aqui elemento e quero buscar o elemento.id, eu quero que ele seja igual ao nosso id que eu recebi aqui.
+
+itens.splice(itens.findIndex(elemento => elemento.id === id), 1);
+
+Eu tenho itens, eu acho o elemento onde o id é igual ao id que eu acabei de clicar para remover, e o deleto. Excelente. Vamos ver aqui, mais um console.log(itens). Eu gostaria que o carregador não existisse mais no nosso array, gostaria que a camisa verde não existe mais no nosso array. Estar lá atualizado. Lógico, se eu voltar a página, estar tudo aqui, porque eu não estou escrevendo no Local Storage.
+
+Para escrever no Local Storage, temos até uma linha que faz isso, localstorage.setItem("item", JSON.stringify(itens)). Ótimo. Se eu remover o carregador e recarregar a minha página, o carregador já não existe mais. Maravilhoso. Se eu remover o celular e recarregar a minha página, o celular já não existe mais. Se eu adicionar o celular novamente, vou levar cinco celulares nessa viagem, se olharmos o nosso Local Storage estão lá os dados certos, mas não exatamente certos.
+
+function deletaElemento(tag, id) {
+    tag.remove();
+
+    itens.splice(itens.findIndex(elemento => elemento.id === id), 1);
+
+    localStorage.setItem("itens", JSON.stringify(itens));
+}
+
+Vamos para o console para isso ficar mais fácil de ver. Se eu der um localstorage aqui olha o meu objeto, eu tenho o celular com 5, com id igual a 2, e aqui a quantidade também tem um id igual a 2. Temos um grave problema. O nosso id deixou de ser o único, o nosso id passou a ser igual o id anterior. Se eu atualizar o celular aqui, inclusive, e disser que eu vou levar um celular, ele não encontrou meu celular aqui para atualizar.
+
+A quantidade está aqui, mas ele não encontrou meu item porque ele foi na camisa verde. Ele está buscando pelo id. A nossa lógica aqui de adicionar o id igual o tamanho do elemento faz muito sentido quando não temos alterações no elemento, mas agora que o nosso elemento pode ter um item removido do meio, o tamanho do array é completamente irrelevante. O que nós precisamos é encontrar o último elemento desse array, a partir do último elemento encontramos o id e soma 1.
+
+E essa lógica, essa evolução na programação é completamente normal. Nós encontramos a solução ideal para o problema que nós temos, não ficamos pensando em uma solução mirabolante para resolver todos os problemas de uma vez só, resolvemos o problema, avançamos e quando o código melhora, quando o desafio melhorar o nosso entendimento sobre o projeto também é melhor, conseguimos fazer um código ainda melhor.
+
+Vamos fazer o que eu falei, temos que no nosso array de itens, no último elemento pegar o ID desse elemento e somar 1. Só que o nosso array pode ser vazio, se eu vier aqui e pegar itens.length - 1, se o tamanho dele for 0, 0 - 1 isso aqui vai dar um erro. Eu preciso ver primeiro se o array existe, se isso aqui for negativo, se isso aqui não existir eu faço uma coisa e se existir eu faço outra.
+
+else {
+        itemAtual.id = itens[itens.length -1] ? (itens[itens.length-1]).id + 1 : 0;
+
+        criaElemento(itemAtual);
+
+        itens.push(itemAtual);
+    }
+
+Eu vou fazer aqui um if, if else, só que eu vou usar o operador ternário. O operador ternário eu simplesmente faço uma interrogação, se positivo faça a primeira condição, se negativo faça a outra. Se o meu array não existe, se não tem nada, o Id que eu quero dar para o elemento é o Id 0, essa é a minha condição final. Se não existir nada no array o Id vira 0, agora se já tiver alguma coisa no Id eu quero achar no último elemento o Id e aí sim, eu quero adicionar 1 a ele.
+
+Vou fazer a mesma coisa aqui, vou lá no último elemento na posição length - 1, se isso aqui existir pego o Id e soma 1, itemAtual.id = itens(itens.length -1) ? (itens(itens.length-1)).id +1 : 0;. Na hora agora de adicionar a camisa preta eu vou levar 10, meu último Id era 2 e o meu novo Id agora é 1 a mais. Se eu somar aqui o carregador eu vou levar um carregador, agora o Id do carregador é 4, estamos incrementando sempre 1.
+
+Resolvemos incrementar, mas ainda tem um problema: eu quero agora atualizar a camisa preta, eu quero levar uma única camisa preta. Ele mudou o meu Id, ele está pegando aqui na hora o Id, ele está pegando o item atual e eu não quero que seja só o Id do exite Id, eu preciso realmente encontrar o meu elemento para fazer isso.
+
+    if (existe) {
+        itemAtual.id = existe.id;
+
+        atualizaElemento(itemAtual);
+
+        itens[itens.findIndex(elemento => elemento.id === existe.id)] = itemAtual;
+    }
+
+A mesma busca que eu fiz aqui embaixo, find index of, pega o elemento Id e troca. É o que vamos fazer. Itens ao invés do existe.id vamos pegar na posição itens[itens.findindex(elemento => elemento.id ===existe.id)] = itemAtual. Eu garanti que eu estou buscando o elemento correto e atualizando o conteúdo daquele elemento correto.
+
+Para deixar isso aqui agora direito, eu vou limpar o Local Storage porque os nossos dados estavam corrompidos e vou colocar aqui uma camisa preta, vou levar 10 nessa viagem, eu vou levar também um bermuda, vou levar três bermudas, vou levar uma calça, vai que faz frio e vou levar também um casaco. Não posso esquecer do celular e, lógico, o carregador do celular.
+
+Tenho a minha mochila de viagem pronta, o Id está sempre incremental. E agora, eu sei que vai fazer 30 graus, realmente não preciso levar nem calça e nem casaco, o meu Local Storage está atualizado. Ah não, eu vi que vai chover eu vou levar uma capa de chuva e agora quando eu adicionei o último item ele tem lá o Id 6.
+
+"Ah, mas tem só 5 elementos na minha lista." Não interessa, estamos pegando o Id do último elemento e adicionando sempre. Criamos uma solução robusta para que possamos adicionar, editar e remover elementos. Digamos que eu queira atualizar e agora eu quero levar 15 camisas pretas, ele atualizou e atualizou o nosso Local Storage.
+
+Código final:
+const form = document.getElementById('novoItem');
+const lista = document.getElementById('lista');
+const itens = JSON.parse(localStorage.getItem('itens')) || []
+
+itens.forEach ( (elemento) => {
+    criaElemento(elemento);
+})
+
+form.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+
+    const nome = evento.target.elements['nome'];
+    const quantidade = evento.target.elements['quantidade'];
+
+    const existe = itens.find(elemento => elemento.nome === nome.value);
+
+    const itemAtual = {
+        "nome": nome.value, 
+        "quantidade": quantidade.value
+    }
+
+    if (existe) {
+        itemAtual.id = existe.id;
+
+        atualizaElemento(itemAtual);
+
+        itens[itens.findIndex(elemento => elemento.id === existe.id)] = itemAtual;
+    }
+    else {
+        itemAtual.id = itens[itens.length -1] ? (itens[itens.length-1]).id + 1 : 0;
+
+        criaElemento(itemAtual);
+
+        itens.push(itemAtual);
+    }
+
+    localStorage.setItem("itens", JSON.stringify(itens));
+
+    nome.value = ''
+    quantidade.value = ''
+})
+
+function criaElemento(item) {
+    const novoItem = document.createElement('li');
+    novoItem.classList.add("item");
+
+    const numeroItem = document.createElement('strong');
+    numeroItem.innerHTML = item.quantidade;
+    numeroItem.dataset.id = item.id
+
+    novoItem.appendChild(numeroItem);
+    novoItem.innerHTML += item.nome;    
+    novoItem.appendChild(botaoDeleta(item.id));
+
+    lista.appendChild(novoItem);
+}
+
+function atualizaElemento(item) {
+    document.querySelector("[data-id='"+item.id+"']").innerHTML = item.quantidade;
+}
+
+function botaoDeleta(id) {
+    const elementoBotao = document.createElement("button");
+    elementoBotao.innerText = "X";
+
+    elementoBotao.addEventListener("click", function() {
+        deletaElemento(this.parentNode, id);
+    })
+
+    return elementoBotao;
+}
+
+function deletaElemento(tag, id) {
+    tag.remove();
+
+    itens.splice(itens.findIndex(elemento => elemento.id === id), 1);
+
+    localStorage.setItem("itens", JSON.stringify(itens));
+}
