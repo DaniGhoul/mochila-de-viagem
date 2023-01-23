@@ -26,10 +26,10 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 Um site para cadastro de itens no LocalStorage, representando uma mochila de viagem e os itens que o viajante não pode esquecer de levar. <p>
 O projeto aplica as seguintes noções:<br>
--Interação com a página e com LocalStorage;<br>
--Criação de objetos no JavaScript;<br>
--Registro de dados no LocalStorage;<br>
--Implementação de páginas WEB que armazenam dados.<br>
+- Interação com a página e com LocalStorage;<br>
+- Criação de objetos no JavaScript;<br>
+- Registro de dados no LocalStorage;<br>
+- Implementação de páginas WEB que armazenam dados.<br>
 
 ## 🔖 Layout
 
