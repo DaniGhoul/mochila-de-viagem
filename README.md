@@ -1,4 +1,4 @@
-<h1 align="center">Projeto Alura Books</h1>
+<h1 align="center">Projeto Mochila de Viagem</h1>
 
 <p align="center">
 Projeto realizado ao longo do curso "JavaScript na Web: armazenando dados no navegador", ministrado por Pedro Marins. O curso faz parte da Formação Javascript da Alura.
@@ -24,12 +24,12 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 ## 💻 Projeto
 
-Um site para cadastro de itens no LocalStorage, representando uma mochila de viagem e os itens que o viajante não pode esquecer de levar. 
-O projeto aplica as seguintes noções:
--Interação com a página e com LocalStorage
--Criação de objetos no JavaScript
--Registro de dados no LocalStorage
--Implementação de páginas WEB que armazenam dados
+Um site para cadastro de itens no LocalStorage, representando uma mochila de viagem e os itens que o viajante não pode esquecer de levar. <br>
+O projeto aplica as seguintes noções:<br>
+-Interação com a página e com LocalStorage<br>
+-Criação de objetos no JavaScript<br>
+-Registro de dados no LocalStorage<br>
+-Implementação de páginas WEB que armazenam dados<br>
 
 ## 🔖 Layout
 
